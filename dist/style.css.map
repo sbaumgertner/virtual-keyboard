@@ -1,0 +1,1 @@
+{"version":3,"file":"style.css","mappings":";;;AAAA;EACI,oBAAoB","sources":["webpack://virtual-keyboard/./src/sass/style.scss"],"sourcesContent":["h1 {\r\n    color: rebeccapurple;\r\n}"],"names":[],"sourceRoot":""}
