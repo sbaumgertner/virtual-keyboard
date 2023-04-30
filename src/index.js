@@ -43,15 +43,18 @@ function generateDocument(){
 let onLang;
 let offLang;
 let pressed = new Set();
+let mousePressed = '';
+let cursorPosition = -1;
 
 window.addEventListener('beforeunload', setLocalStorage);
 window.addEventListener('load', init);
 
-function init(){
+function init(event){
     getLocalStorage();
     generateDocument();
     initLang();
     addEventListeners();
+    //alert(event.getModifierState("CapsLock"));
 }
 
 function setLocalStorage() {
@@ -94,6 +97,9 @@ function addEventListeners(){
         if (pressed.has('ControlLeft') && pressed.has('AltLeft')){
             changeLang();
         }
+        if (document.activeElement != document.querySelector('.keyboard-input')){
+            addInput(keyEl);
+        }
       });
     
       document.addEventListener('keyup', function(event) {
@@ -103,9 +109,56 @@ function addEventListeners(){
         pressed.delete(event.code);
       });
     
-      document.querySelector('.keyboard').addEventListener('click', function(event) {
-        event.target.closest('.key').classList.add('light');
+      document.querySelector('.keyboard').addEventListener('mousedown', function(event) {
+        let keyEl = event.target.closest('.key');
+        if (keyEl){
+            keyEl.classList.add('light');
+            pressed.add(keyEl.dataset.code);
+            mousePressed = keyEl.dataset.code;
+            if (pressed.has('ControlLeft') && pressed.has('AltLeft')){
+                changeLang();
+            }
+            addInput(keyEl);
+        }
       });
+
+      document.addEventListener('mouseup', function(event) {
+        if (mousePressed){
+            let keyEl = document.querySelector('.' + mousePressed.toLowerCase());
+            keyEl.classList.remove('light');
+            pressed.delete(keyEl.dataset.code);
+            mousePressed = '';
+        }
+      });
+}
+
+function addInput(keyEl){
+    if (keyEl.classList.contains('special')){
+        return;
+    }
+    let lang = keyEl.querySelector('.' + onLang);
+    let shift = pressed.has('ShiftLeft') || pressed.has('ShiftRight');
+    let caps = pressed.has('CapsLock');
+    let key = '';
+    if (!shift && !caps){
+        key = lang.querySelector('.regular');
+    }
+    else if (shift && !caps){
+        key = lang.querySelector('.shift');
+    }
+    else if (!shift && caps){
+        key = lang.querySelector('.caps');
+    }
+    else {
+        key = lang.querySelector('.caps-shift');
+    }
+    let input = document.querySelector('.keyboard-input');
+    input.value = input.value + key.textContent
+    //let pos = input.selectionStart;
+    //console.log(input.selectionStart + ' ' + input.selectionEnd);
+    //input.value = input.value.substring(0, pos) + key.textContent + input.value.substring(pos);
+    //input.selectionStart = input.selectionStart + 1;
+    //input.selectionEnd = input.selectionStart;
 }
 
 
