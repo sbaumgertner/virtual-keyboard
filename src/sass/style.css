@@ -11,13 +11,18 @@
   border-radius: 3px;
   cursor: pointer;
   user-select: none;
+  transition: 0.3s;
+}
+.key:hover {
+  background: rgba(36, 82, 209, 0.4941176471);
 }
 
 .special {
   background: #222222;
 }
 
-.en {
+.en,
+.ru {
   line-height: 40px;
 }
 
@@ -71,6 +76,11 @@
 
 .space {
   width: 330px;
+}
+
+.light {
+  background: #204ecf !important;
+  border-radius: 20px;
 }
 
 /*# sourceMappingURL=style.css.map */

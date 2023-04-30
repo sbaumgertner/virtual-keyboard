@@ -12,12 +12,16 @@
   background: #444444;
   border-radius: 3px;
   cursor: pointer;
-  user-select: none; }
+  user-select: none;
+  transition: 0.3s; }
+  .key:hover {
+    background: #2452d17e; }
 
 .special {
   background: #222222; }
 
-.en {
+.en,
+.ru {
   line-height: 40px; }
 
 .keyboard__row {
@@ -62,6 +66,10 @@
 
 .space {
   width: 330px; }
+
+.light {
+  background: #204ecf !important;
+  border-radius: 20px; }
 
 
 /*# sourceMappingURL=style.css.map*/

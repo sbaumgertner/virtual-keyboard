@@ -40,4 +40,50 @@ function generateDocument(){
     document.body.appendChild(wrapper);
 }
 
+let onLang = 'ru';
+let offLang = 'en';
+
+function initLang(){
+
+    let onArr = document.querySelectorAll('.' + onLang);
+    for (let item of onArr){
+        item.classList.remove('hidden');
+    }
+    let offArr = document.querySelectorAll('.' + offLang);
+    for (let item of offArr){
+        item.classList.add('hidden');
+    }
+}
+
+function changeLang(){
+    let tmp = onLang;
+    onLang = offLang;
+    offLang = tmp;
+    initLang();
+}
+
 generateDocument();
+initLang();
+
+let pressed = new Set();
+
+document.addEventListener('keydown', function(event) {
+    let keyClass = event.code.toLowerCase();
+    let keyEl = document.querySelector('.' + keyClass);
+    if (!keyEl.classList.contains('light')){
+        keyEl.classList.add('light');
+    }
+    pressed.add(event.code);
+    if (pressed.has('ControlLeft') && pressed.has('AltLeft')){
+        changeLang();
+    }
+  });
+
+  document.addEventListener('keyup', function(event) {
+    let keyClass = event.code.toLowerCase();
+    let keyEl = document.querySelector('.' + keyClass);
+    if (keyEl.classList.contains('light')){
+        keyEl.classList.remove('light');
+    }
+    pressed.delete(event.code);
+  });

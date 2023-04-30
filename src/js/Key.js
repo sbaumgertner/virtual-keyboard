@@ -19,10 +19,10 @@ export class Key {
                 '<span class="caps-shift hidden">' + this.en.shift_caps + '/span>' +
             '</div>' +
             '<div class="ru hidden">' +
-                '<span class="regular">ё</span>' +
-                '<span class="shift">Ё</span>' +
-                '<span class="caps">Ё</span>' +
-                '<span class="caps-shift">ё</span>' +
+                '<span class="regular">' + this.ru.key + '</span>' +
+                '<span class="shift hidden">' + this.ru.shift + '</span>' +
+                '<span class="caps hidden">' + this.ru.caps + '</span>' +
+                '<span class="caps-shift hidden">' + this.ru.shift_caps + '</span>' +
             '</div>';
         return key;
     }

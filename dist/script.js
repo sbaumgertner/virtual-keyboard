@@ -33,10 +33,10 @@ class Key {
                 '<span class="caps-shift hidden">' + this.en.shift_caps + '/span>' +
             '</div>' +
             '<div class="ru hidden">' +
-                '<span class="regular">ё</span>' +
-                '<span class="shift">Ё</span>' +
-                '<span class="caps">Ё</span>' +
-                '<span class="caps-shift">ё</span>' +
+                '<span class="regular">' + this.ru.key + '</span>' +
+                '<span class="shift hidden">' + this.ru.shift + '</span>' +
+                '<span class="caps hidden">' + this.ru.caps + '</span>' +
+                '<span class="caps-shift hidden">' + this.ru.shift_caps + '</span>' +
             '</div>';
         return key;
     }
@@ -162,7 +162,53 @@ function generateDocument(){
     document.body.appendChild(wrapper);
 }
 
+let onLang = 'ru';
+let offLang = 'en';
+
+function initLang(){
+
+    let onArr = document.querySelectorAll('.' + onLang);
+    for (let item of onArr){
+        item.classList.remove('hidden');
+    }
+    let offArr = document.querySelectorAll('.' + offLang);
+    for (let item of offArr){
+        item.classList.add('hidden');
+    }
+}
+
+function changeLang(){
+    let tmp = onLang;
+    onLang = offLang;
+    offLang = tmp;
+    initLang();
+}
+
 generateDocument();
+initLang();
+
+let pressed = new Set();
+
+document.addEventListener('keydown', function(event) {
+    let keyClass = event.code.toLowerCase();
+    let keyEl = document.querySelector('.' + keyClass);
+    if (!keyEl.classList.contains('light')){
+        keyEl.classList.add('light');
+    }
+    pressed.add(event.code);
+    if (pressed.has('ControlLeft') && pressed.has('AltLeft')){
+        changeLang();
+    }
+  });
+
+  document.addEventListener('keyup', function(event) {
+    let keyClass = event.code.toLowerCase();
+    let keyEl = document.querySelector('.' + keyClass);
+    if (keyEl.classList.contains('light')){
+        keyEl.classList.remove('light');
+    }
+    pressed.delete(event.code);
+  });
 })();
 
 // This entry need to be wrapped in an IIFE because it need to be isolated against other entry modules.
