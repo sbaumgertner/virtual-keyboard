@@ -1,8 +1,67 @@
 /*!**************************************************************************************************************!*\
   !*** css ./node_modules/css-loader/dist/cjs.js!./node_modules/sass-loader/dist/cjs.js!./src/sass/style.scss ***!
   \**************************************************************************************************************/
-h1 {
-  color: rebeccapurple; }
+.hidden {
+  display: none; }
+
+.key {
+  width: 40px;
+  height: 40px;
+  text-align: center;
+  color: #ffffff;
+  background: #444444;
+  border-radius: 3px;
+  cursor: pointer;
+  user-select: none; }
+
+.special {
+  background: #222222; }
+
+.en {
+  line-height: 40px; }
+
+.keyboard__row {
+  display: flex;
+  gap: 6px; }
+
+.keyboard {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 10px;
+  border: #444444 1px solid;
+  border-radius: 3px; }
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center; }
+
+.keyboard-input {
+  display: block;
+  width: 700px;
+  height: 200px;
+  margin: 10px auto 10px;
+  padding: 10px;
+  font-size: 18px;
+  color: #444444; }
+
+.backspace,
+.capslock,
+.shiftleft {
+  width: 100px; }
+
+.tab {
+  width: 50px; }
+
+.delete {
+  width: 44px; }
+
+.enter, .shiftright {
+  width: 86px; }
+
+.space {
+  width: 330px; }
 
 
 /*# sourceMappingURL=style.css.map*/
