@@ -162,8 +162,31 @@ function generateDocument(){
     document.body.appendChild(wrapper);
 }
 
-let onLang = 'ru';
-let offLang = 'en';
+let onLang;
+let offLang;
+let pressed = new Set();
+
+window.addEventListener('beforeunload', setLocalStorage);
+window.addEventListener('load', init);
+
+function init(){
+    getLocalStorage();
+    generateDocument();
+    initLang();
+    addEventListeners();
+}
+
+function setLocalStorage() {
+    localStorage.setItem('lang', onLang);
+}
+
+function getLocalStorage() {
+    if (localStorage.getItem('lang')) {
+        onLang = localStorage.getItem('lang');
+    }
+    else onLang = 'en';
+    onLang == 'en' ? offLang = 'ru' : offLang = 'en';
+}
 
 function initLang(){
 
@@ -184,31 +207,32 @@ function changeLang(){
     initLang();
 }
 
-generateDocument();
-initLang();
-
-let pressed = new Set();
-
-document.addEventListener('keydown', function(event) {
-    let keyClass = event.code.toLowerCase();
-    let keyEl = document.querySelector('.' + keyClass);
-    if (!keyEl.classList.contains('light')){
+function addEventListeners(){
+    document.addEventListener('keydown', function(event) {
+        let keyClass = event.code.toLowerCase();
+        let keyEl = document.querySelector('.' + keyClass);
         keyEl.classList.add('light');
-    }
-    pressed.add(event.code);
-    if (pressed.has('ControlLeft') && pressed.has('AltLeft')){
-        changeLang();
-    }
-  });
-
-  document.addEventListener('keyup', function(event) {
-    let keyClass = event.code.toLowerCase();
-    let keyEl = document.querySelector('.' + keyClass);
-    if (keyEl.classList.contains('light')){
+        pressed.add(event.code);
+        if (pressed.has('ControlLeft') && pressed.has('AltLeft')){
+            changeLang();
+        }
+      });
+    
+      document.addEventListener('keyup', function(event) {
+        let keyClass = event.code.toLowerCase();
+        let keyEl = document.querySelector('.' + keyClass);
         keyEl.classList.remove('light');
-    }
-    pressed.delete(event.code);
-  });
+        pressed.delete(event.code);
+      });
+    
+      document.querySelector('.keyboard').addEventListener('click', function(event) {
+        event.target.closest('.key').classList.add('light');
+      });
+}
+
+
+
+
 })();
 
 // This entry need to be wrapped in an IIFE because it need to be isolated against other entry modules.
