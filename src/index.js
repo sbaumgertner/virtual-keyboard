@@ -54,7 +54,6 @@ function init(event){
     generateDocument();
     initLang();
     addEventListeners();
-    //alert(event.getModifierState("CapsLock"));
 }
 
 function setLocalStorage() {
@@ -100,6 +99,9 @@ function addEventListeners(){
         if (document.activeElement != document.querySelector('.keyboard-input')){
             addInput(keyEl);
         }
+        else {
+            cursorPosition += 1;
+        }
       });
     
       document.addEventListener('keyup', function(event) {
@@ -130,6 +132,12 @@ function addEventListeners(){
             mousePressed = '';
         }
       });
+
+      document.querySelector('.keyboard-input').addEventListener('click', function(event) {
+        let input = document.querySelector('.keyboard-input');
+        cursorPosition = input.selectionStart;
+        console.log('set pos = ' + cursorPosition);
+      });
 }
 
 function addInput(keyEl){
@@ -153,12 +161,17 @@ function addInput(keyEl){
         key = lang.querySelector('.caps-shift');
     }
     let input = document.querySelector('.keyboard-input');
-    input.value = input.value + key.textContent
-    //let pos = input.selectionStart;
-    //console.log(input.selectionStart + ' ' + input.selectionEnd);
-    //input.value = input.value.substring(0, pos) + key.textContent + input.value.substring(pos);
-    //input.selectionStart = input.selectionStart + 1;
-    //input.selectionEnd = input.selectionStart;
+    console.log(cursorPosition);
+
+    if (cursorPosition < 0 || cursorPosition >= input.value.length){
+        input.value = input.value + key.textContent;
+        cursorPosition = input.value.length;
+    }
+    else {
+        input.value = input.value.substring(0, cursorPosition) + 
+        key.textContent + input.value.substring(cursorPosition);
+        cursorPosition += 1;
+    }
 }
 
 
