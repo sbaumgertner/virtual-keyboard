@@ -13,34 +13,35 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "Key": () => (/* binding */ Key)
 /* harmony export */ });
 class Key {
-    constructor (src){
-        this.keyCode = src.keyCode;
-        this.code = src.code;
-        this.en = src.en;
-        this.ru = src.ru;
-        this.special = src.special;
-    }
+  constructor(src) {
+    this.keyCode = src.keyCode;
+    this.code = src.code;
+    this.en = src.en;
+    this.ru = src.ru;
+    this.special = src.special;
+  }
 
-    generateHTML() {
-        let key = document.createElement('div');
-        key.className = 'key' + (this.special ? ' special' : '')  + ' ' + this.code.toLowerCase();
-        key.setAttribute('data-code', this.code);
+  generateHTML() {
+    const key = document.createElement('div');
+    key.className = `key${this.special ? ' special' : ''} ${this.code.toLowerCase()}`;
+    key.setAttribute('data-code', this.code);
 
-        key.innerHTML = '<div class="en">' +
-                '<span class="regular">' + this.en.key + '</span>' +
-                '<span class="shift hidden">' + this.en.shift + '</span>' +
-                '<span class="caps hidden">' + this.en.caps + '</span>' +
-                '<span class="caps-shift hidden">' + this.en.shift_caps + '</span>' +
-            '</div>' +
-            '<div class="ru hidden">' +
-                '<span class="regular">' + this.ru.key + '</span>' +
-                '<span class="shift hidden">' + this.ru.shift + '</span>' +
-                '<span class="caps hidden">' + this.ru.caps + '</span>' +
-                '<span class="caps-shift hidden">' + this.ru.shift_caps + '</span>' +
-            '</div>';
-        return key;
-    }
+    key.innerHTML = `${'<div class="en">'
+                + '<span class="regular">'}${this.en.key}</span>`
+                + `<span class="shift hidden">${this.en.shift}</span>`
+                + `<span class="caps hidden">${this.en.caps}</span>`
+                + `<span class="caps-shift hidden">${this.en.shift_caps}</span>`
+            + '</div>'
+            + '<div class="ru hidden">'
+                + `<span class="regular">${this.ru.key}</span>`
+                + `<span class="shift hidden">${this.ru.shift}</span>`
+                + `<span class="caps hidden">${this.ru.caps}</span>`
+                + `<span class="caps-shift hidden">${this.ru.shift_caps}</span>`
+            + '</div>';
+    return key;
+  }
 }
+
 
 /***/ }),
 
@@ -119,279 +120,263 @@ var __webpack_exports__ = {};
   \**********************/
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _js_keyboard_json__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./js/keyboard.json */ "./src/js/keyboard.json");
-/* harmony import */ var _js_Key_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./js/Key.js */ "./src/js/Key.js");
+/* harmony import */ var _js_Key__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./js/Key */ "./src/js/Key.js");
+// assert {type: 'json'};
 
 
-
-function generateRow (keysArray){
-    let row = document.createElement('div');
-    row.className = 'keyboard__row';
-    for (let keyData of keysArray){
-        let key =  new _js_Key_js__WEBPACK_IMPORTED_MODULE_1__.Key(keyData);
-        row.appendChild(key.generateHTML());
-    }
-    return row;
+function generateRow(keysArray) {
+  const row = document.createElement('div');
+  row.className = 'keyboard__row';
+  keysArray.forEach((keyData) => {
+    const key = new _js_Key__WEBPACK_IMPORTED_MODULE_1__.Key(keyData);
+    row.appendChild(key.generateHTML());
+  });
+  return row;
 }
 
-function generateKeyboard(data){
-    let keyboard = document.createElement('div');
-    keyboard.className = 'keyboard';
-    for (let dataRow of data){
-        keyboard.appendChild(generateRow(dataRow));
-    }
-    return keyboard;
+function generateKeyboard(data) {
+  const keyboard = document.createElement('div');
+  keyboard.className = 'keyboard';
+  data.forEach((dataRow) => {
+    keyboard.appendChild(generateRow(dataRow));
+  });
+  return keyboard;
 }
 
-function generateDocument(){
-    let wrapper = document.createElement('div');
-    wrapper.className = 'wrapper';
-    wrapper.innerHTML = '<h1 class="h1">Virtual keyboard</h1>' +
-    '<textarea class="keyboard-input"></textarea>';
-    wrapper.appendChild(generateKeyboard(_js_keyboard_json__WEBPACK_IMPORTED_MODULE_0__));
+function generateDocument() {
+  const wrapper = document.createElement('div');
+  wrapper.className = 'wrapper';
+  wrapper.innerHTML = '<h1 class="h1">Virtual keyboard</h1>'
+    + '<textarea class="keyboard-input"></textarea>';
+  wrapper.appendChild(generateKeyboard(_js_keyboard_json__WEBPACK_IMPORTED_MODULE_0__));
 
-    let os = document.createElement('p');
-    os.className = 'os-info';
-    os.innerHTML = 'Created in the Windows OS';
-    wrapper.appendChild(os);
+  const os = document.createElement('p');
+  os.className = 'os-info';
+  os.innerHTML = 'Created in the Windows OS';
+  wrapper.appendChild(os);
 
-    let lang = document.createElement('p');
-    lang.className = 'lang-info';
-    lang.innerHTML = 'Switch language: left ctrl + alt';
-    wrapper.appendChild(lang);
+  const lang = document.createElement('p');
+  lang.className = 'lang-info';
+  lang.innerHTML = 'Switch language: left ctrl + alt';
+  wrapper.appendChild(lang);
 
-    document.body.appendChild(wrapper);
+  document.body.appendChild(wrapper);
 }
 
 let onLang;
 let offLang;
-let pressed = new Set();
+const pressed = new Set();
 let mousePressed = '';
 let cursorPosition = -1;
 
 let input;
 
-window.addEventListener('beforeunload', setLocalStorage);
-window.addEventListener('load', init);
-
-function init(event){
-    getLocalStorage();
-    generateDocument();
-    initLang();
-    addEventListeners();
-
-    input = document.querySelector('.keyboard-input');
-}
-
 function setLocalStorage() {
-    localStorage.setItem('lang', onLang);
+  localStorage.setItem('lang', onLang);
 }
 
 function getLocalStorage() {
-    if (localStorage.getItem('lang')) {
-        onLang = localStorage.getItem('lang');
-    }
-    else onLang = 'en';
-    onLang == 'en' ? offLang = 'ru' : offLang = 'en';
+  if (localStorage.getItem('lang')) {
+    onLang = localStorage.getItem('lang');
+  } else onLang = 'en';
+  offLang = (onLang === 'en') ? 'ru' : 'en';
 }
 
-function initLang(){
-
-    let onArr = document.querySelectorAll('.' + onLang);
-    for (let item of onArr){
-        item.classList.remove('hidden');
-    }
-    let offArr = document.querySelectorAll('.' + offLang);
-    for (let item of offArr){
-        item.classList.add('hidden');
-    }
+function initLang() {
+  const onArr = document.querySelectorAll(`.${onLang}`);
+  onArr.forEach((item) => {
+    item.classList.remove('hidden');
+  });
+  const offArr = document.querySelectorAll(`.${offLang}`);
+  offArr.forEach((item) => {
+    item.classList.add('hidden');
+  });
 }
 
-function changeLang(){
-    let tmp = onLang;
-    onLang = offLang;
-    offLang = tmp;
-    initLang();
-}
-
-function addEventListeners(){
-    document.addEventListener('keydown', function(event) {
-        let keyClass = event.code.toLowerCase();
-        let keyEl = document.querySelector('.' + keyClass);
-        event.preventDefault();
-        handleKey(keyEl);
-      });
-    
-      document.addEventListener('keyup', function(event) {
-        if (event.code != 'CapsLock'){
-            let keyClass = event.code.toLowerCase();
-            let keyEl = document.querySelector('.' + keyClass);
-            handleKeyUp(keyEl);
-        }
-      });
-    
-      document.querySelector('.keyboard').addEventListener('mousedown', function(event) {
-        let keyEl = event.target.closest('.key');
-        if (keyEl){
-            handleKey(keyEl);
-        }
-      });
-
-      document.addEventListener('mouseup', function(event) {
-        if (mousePressed){
-            let keyEl = document.querySelector('.' + mousePressed.toLowerCase());
-            handleKeyUp(keyEl);
-            mousePressed = '';
-        }
-      });
-
-      document.querySelector('.keyboard-input').addEventListener('click', function(event) {
-        let input = document.querySelector('.keyboard-input');
-        cursorPosition = input.selectionStart;
-        console.log('set pos = ' + cursorPosition);
-      });
-}
-
-function handleKeyUp(keyEl){
-    if (keyEl.dataset.code != 'CapsLock'){
-        keyEl.classList.remove('light');
-        pressed.delete(keyEl.dataset.code);
-    }
-    if (keyEl.dataset.code == 'ShiftLeft' || keyEl.dataset.code == 'ShiftRight'){
-        updateKeys();
-    }
-}
-
-function handleKey(keyEl){
-    if (keyEl.dataset.code != 'CapsLock' || !pressed.has('CapsLock')){
-        keyEl.classList.add('light');
-        pressed.add(keyEl.dataset.code);
-        mousePressed = keyEl.dataset.code;
-    }
-    else {
-        keyEl.classList.remove('light');
-        pressed.delete(keyEl.dataset.code);
-    }
-    if (pressed.has('ControlLeft') && pressed.has('AltLeft')){
-        changeLang();
-    }
-    if (keyEl.classList.contains('special')){
-        handleSpecialKey(keyEl);
-    }
-    else {
-        addInput(keyEl); 
-    }
-}
-
-function addInput(keyEl){
-    let lang = keyEl.querySelector('.' + onLang);
-    let shift = pressed.has('ShiftLeft') || pressed.has('ShiftRight');
-    let caps = pressed.has('CapsLock');
-    let key = '';
-    if (!shift && !caps){
-        key = lang.querySelector('.regular');
-    }
-    else if (shift && !caps){
-        key = lang.querySelector('.shift');
-    }
-    else if (!shift && caps){
-        key = lang.querySelector('.caps');
-    }
-    else {
-        key = lang.querySelector('.caps-shift');
-    }
-    insertKeyInput(key.textContent);
+function changeLang() {
+  const tmp = onLang;
+  onLang = offLang;
+  offLang = tmp;
+  initLang();
 }
 
 function insertKeyInput(content) {
-    if (cursorPosition < 0 || cursorPosition >= input.value.length){
-        input.value = `${input.value}${content}`;
-        cursorPosition = input.value.length;
-    }
-    else {
-        let start = input.value.substring(0, cursorPosition);
-        let end = input.value.substring(cursorPosition);
-        input.value = `${start}${content}${end}`;
-        cursorPosition += 1;
-    }
-    input.selectionStart = input.selectionEnd = cursorPosition;
+  if (cursorPosition < 0 || cursorPosition >= input.value.length) {
+    input.value = `${input.value}${content}`;
+    cursorPosition = input.value.length;
+  } else {
+    const start = input.value.substring(0, cursorPosition);
+    const end = input.value.substring(cursorPosition);
+    input.value = `${start}${content}${end}`;
+    cursorPosition += 1;
+  }
+  input.selectionStart = cursorPosition;
+  input.selectionEnd = cursorPosition;
 }
 
-function deleteKey(next){
-    let pos = next ? cursorPosition : cursorPosition - 1;
-    if (pos >= 0 && pos < input.value.length){
-        input.value = input.value.substring(0, pos) + 
-                    input.value.substring(pos + 1);
-    }
-    if (!next){
-        cursorPosition -= 1;
-    }
+function addInput(keyEl) {
+  const lang = keyEl.querySelector(`.${onLang}`);
+  const shift = pressed.has('ShiftLeft') || pressed.has('ShiftRight');
+  const caps = pressed.has('CapsLock');
+  let key = '';
+  if (!shift && !caps) {
+    key = lang.querySelector('.regular');
+  } else if (shift && !caps) {
+    key = lang.querySelector('.shift');
+  } else if (!shift && caps) {
+    key = lang.querySelector('.caps');
+  } else {
+    key = lang.querySelector('.caps-shift');
+  }
+  insertKeyInput(key.textContent);
 }
 
-function handleSpecialKey(keyEl){
-    let arrows = ['ArrowUp', 'ArrowLeft', 'ArrowRight', 'ArrowDown'];
-    let code = keyEl.dataset.code;
-    if (arrows.includes(code)){
-        addInput(keyEl);
-    }
-    else if (code == 'Backspace'){
-        deleteKey(false);
-    }
-    else if (code == 'Delete'){
-        deleteKey(true);
-    }
-    else if (code == 'Tab'){
-        insertKeyInput(`\t`);
-    }
-    else if (code == 'Enter'){
-        insertKeyInput(`\n`);
-    }
-    else if (code == 'CapsLock' || code == 'ShiftLeft' || code == 'ShiftRight'){
-        updateKeys();
-    }
+function deleteKey(next) {
+  const pos = next ? cursorPosition : cursorPosition - 1;
+  if (pos >= 0 && pos < input.value.length) {
+    input.value = input.value.substring(0, pos)
+                      + input.value.substring(pos + 1);
+  }
+  if (!next) {
+    cursorPosition -= 1;
+  }
 }
 
-function updateKeys(){
-    let shift = pressed.has('ShiftLeft') || pressed.has('ShiftRight');
-    let caps = pressed.has('CapsLock');
-
-    let regularKeys = document.querySelectorAll('.regular');
-    let shiftKeys = document.querySelectorAll('.shift');
-    let capsKeys = document.querySelectorAll('.caps');
-    let capsShiftKeys = document.querySelectorAll('.caps-shift');
-    if (!shift && !caps){
-        switchHiddenKeys(regularKeys, false);
-        switchHiddenKeys(shiftKeys, true);
-        switchHiddenKeys(capsKeys, true);
-        switchHiddenKeys(capsShiftKeys, true);
+function switchHiddenKeys(keysArr, isHidden) {
+  keysArr.forEach((item) => {
+    if (isHidden) {
+      item.classList.add('hidden');
+    } else {
+      item.classList.remove('hidden');
     }
-    else if (shift && !caps){
-        switchHiddenKeys(regularKeys, true);
-        switchHiddenKeys(shiftKeys, false);
-        switchHiddenKeys(capsKeys, true);
-        switchHiddenKeys(capsShiftKeys, true);
-    }
-    else if (!shift && caps){
-        switchHiddenKeys(regularKeys, true);
-        switchHiddenKeys(shiftKeys, true);
-        switchHiddenKeys(capsKeys, false);
-        switchHiddenKeys(capsShiftKeys, true);
-    }
-    else {
-        switchHiddenKeys(regularKeys, true);
-        switchHiddenKeys(shiftKeys, true);
-        switchHiddenKeys(capsKeys, true);
-        switchHiddenKeys(capsShiftKeys, false);
-    }
+  });
 }
 
-function switchHiddenKeys(keysArr, isHidden){
-    for (let item of keysArr){
-        isHidden ? item.classList.add('hidden') : item.classList.remove('hidden');
-    }
+function updateKeys() {
+  const shift = pressed.has('ShiftLeft') || pressed.has('ShiftRight');
+  const caps = pressed.has('CapsLock');
+
+  const regularKeys = document.querySelectorAll('.regular');
+  const shiftKeys = document.querySelectorAll('.shift');
+  const capsKeys = document.querySelectorAll('.caps');
+  const capsShiftKeys = document.querySelectorAll('.caps-shift');
+  if (!shift && !caps) {
+    switchHiddenKeys(regularKeys, false);
+    switchHiddenKeys(shiftKeys, true);
+    switchHiddenKeys(capsKeys, true);
+    switchHiddenKeys(capsShiftKeys, true);
+  } else if (shift && !caps) {
+    switchHiddenKeys(regularKeys, true);
+    switchHiddenKeys(shiftKeys, false);
+    switchHiddenKeys(capsKeys, true);
+    switchHiddenKeys(capsShiftKeys, true);
+  } else if (!shift && caps) {
+    switchHiddenKeys(regularKeys, true);
+    switchHiddenKeys(shiftKeys, true);
+    switchHiddenKeys(capsKeys, false);
+    switchHiddenKeys(capsShiftKeys, true);
+  } else {
+    switchHiddenKeys(regularKeys, true);
+    switchHiddenKeys(shiftKeys, true);
+    switchHiddenKeys(capsKeys, true);
+    switchHiddenKeys(capsShiftKeys, false);
+  }
 }
 
+function handleSpecialKey(keyEl) {
+  const arrows = ['ArrowUp', 'ArrowLeft', 'ArrowRight', 'ArrowDown'];
+  const { code } = keyEl.dataset;
+  if (arrows.includes(code)) {
+    addInput(keyEl);
+  } else if (code === 'Backspace') {
+    deleteKey(false);
+  } else if (code === 'Delete') {
+    deleteKey(true);
+  } else if (code === 'Tab') {
+    insertKeyInput('\t');
+  } else if (code === 'Enter') {
+    insertKeyInput('\n');
+  } else if (code === 'CapsLock' || code === 'ShiftLeft' || code === 'ShiftRight') {
+    updateKeys();
+  }
+}
 
+function handleKey(keyEl) {
+  if (keyEl.dataset.code !== 'CapsLock' || !pressed.has('CapsLock')) {
+    keyEl.classList.add('light');
+    pressed.add(keyEl.dataset.code);
+    mousePressed = keyEl.dataset.code;
+  } else {
+    keyEl.classList.remove('light');
+    pressed.delete(keyEl.dataset.code);
+  }
+  if (pressed.has('ControlLeft') && pressed.has('AltLeft')) {
+    changeLang();
+  }
+  if (keyEl.classList.contains('special')) {
+    handleSpecialKey(keyEl);
+  } else {
+    addInput(keyEl);
+  }
+}
 
+function handleKeyUp(keyEl) {
+  if (keyEl.dataset.code !== 'CapsLock') {
+    keyEl.classList.remove('light');
+    pressed.delete(keyEl.dataset.code);
+  }
+  if (keyEl.dataset.code === 'ShiftLeft' || keyEl.dataset.code === 'ShiftRight') {
+    updateKeys();
+  }
+}
+
+function addEventListeners() {
+  document.addEventListener('keydown', (event) => {
+    const keyClass = event.code.toLowerCase();
+    const keyEl = document.querySelector(`.${keyClass}`);
+    event.preventDefault();
+    handleKey(keyEl);
+  });
+
+  document.addEventListener('keyup', (event) => {
+    if (event.code !== 'CapsLock') {
+      const keyClass = event.code.toLowerCase();
+      const keyEl = document.querySelector(`.${keyClass}`);
+      handleKeyUp(keyEl);
+    }
+  });
+
+  document.querySelector('.keyboard').addEventListener('mousedown', (event) => {
+    const keyEl = event.target.closest('.key');
+    if (keyEl) {
+      handleKey(keyEl);
+    }
+  });
+
+  document.addEventListener('mouseup', () => {
+    if (mousePressed) {
+      const keyEl = document.querySelector(`.${mousePressed.toLowerCase()}`);
+      handleKeyUp(keyEl);
+      mousePressed = '';
+    }
+  });
+
+  document.querySelector('.keyboard-input').addEventListener('click', () => {
+    cursorPosition = input.selectionStart;
+  });
+}
+
+function init() {
+  getLocalStorage();
+  generateDocument();
+  initLang();
+  addEventListeners();
+
+  input = document.querySelector('.keyboard-input');
+}
+
+window.addEventListener('beforeunload', setLocalStorage);
+window.addEventListener('load', init);
 
 })();
 
