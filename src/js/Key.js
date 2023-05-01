@@ -16,7 +16,7 @@ export class Key {
                 '<span class="regular">' + this.en.key + '</span>' +
                 '<span class="shift hidden">' + this.en.shift + '</span>' +
                 '<span class="caps hidden">' + this.en.caps + '</span>' +
-                '<span class="caps-shift hidden">' + this.en.shift_caps + '/span>' +
+                '<span class="caps-shift hidden">' + this.en.shift_caps + '</span>' +
             '</div>' +
             '<div class="ru hidden">' +
                 '<span class="regular">' + this.ru.key + '</span>' +
