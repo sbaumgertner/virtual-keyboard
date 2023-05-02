@@ -182,7 +182,6 @@ function handleKey(keyEl) {
   if (keyEl.dataset.code !== 'CapsLock' || !pressed.has('CapsLock')) {
     keyEl.classList.add('light');
     pressed.add(keyEl.dataset.code);
-    mousePressed = keyEl.dataset.code;
   } else {
     keyEl.classList.remove('light');
     pressed.delete(keyEl.dataset.code);
@@ -226,6 +225,7 @@ function addEventListeners() {
   document.querySelector('.keyboard').addEventListener('mousedown', (event) => {
     const keyEl = event.target.closest('.key');
     if (keyEl) {
+      mousePressed = keyEl.dataset.code;
       handleKey(keyEl);
     }
   });
