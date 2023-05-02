@@ -14,6 +14,7 @@ module.exports = {
   },
   plugins: [
   ],
+  ignorePatterns: ['webpack.config.js'],
   rules: {
     'import/prefer-default-export': 'off',
   },

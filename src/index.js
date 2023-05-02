@@ -1,4 +1,4 @@
-import keys from './js/keyboard.json';// assert {type: 'json'};
+import keys from './js/keyboard.json';
 import { Key } from './js/Key';
 
 function generateRow(keysArray) {
