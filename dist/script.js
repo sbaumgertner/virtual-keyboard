@@ -121,7 +121,7 @@ var __webpack_exports__ = {};
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _js_keyboard_json__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./js/keyboard.json */ "./src/js/keyboard.json");
 /* harmony import */ var _js_Key__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./js/Key */ "./src/js/Key.js");
-// assert {type: 'json'};
+
 
 
 function generateRow(keysArray) {
@@ -305,7 +305,6 @@ function handleKey(keyEl) {
   if (keyEl.dataset.code !== 'CapsLock' || !pressed.has('CapsLock')) {
     keyEl.classList.add('light');
     pressed.add(keyEl.dataset.code);
-    mousePressed = keyEl.dataset.code;
   } else {
     keyEl.classList.remove('light');
     pressed.delete(keyEl.dataset.code);
@@ -349,6 +348,7 @@ function addEventListeners() {
   document.querySelector('.keyboard').addEventListener('mousedown', (event) => {
     const keyEl = event.target.closest('.key');
     if (keyEl) {
+      mousePressed = keyEl.dataset.code;
       handleKey(keyEl);
     }
   });
